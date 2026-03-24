@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weight Converter | Unit Conversion Toolkit</title>
+  <meta name="description" content="Use Unit Conversion Toolkit's free weight converter for grams, kilograms, ounces, and pounds." />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="scripts.js" defer></script>
+  <style>
+    select {
+      width: 100%;
+      padding: 0.85rem 0.9rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 1rem;
+      background: white;
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="topbar">
+      <a class="brand" href="index.html">Unit Conversion Toolkit</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="distance.html">Distance</a>
+        <a href="temperature.html">Temperature</a>
+        <a href="weight.html">Weight</a>
+        <a href="volume.html">Volume</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+    <div class="hero">
+      <h1>Weight Converter</h1>
+      <p>Convert between grams, kilograms, ounces, and pounds with one simple tool. It is handy for cooking, shipping, fitness tracking, shopping, and everyday measurement comparisons.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <section class="section calculator-layout">
+      <div class="card">
+        <h2>Convert weight</h2>
+        <div class="input-grid">
+          <div>
+            <label for="weight-value">Weight value</label>
+            <input id="weight-value" type="number" placeholder="5" />
+          </div>
+          <div>
+            <label for="weight-from">From unit</label>
+            <select id="weight-from">
+              <option value="g">Grams (g)</option>
+              <option value="kg">Kilograms (kg)</option>
+              <option value="oz">Ounces (oz)</option>
+              <option value="lb">Pounds (lb)</option>
+            </select>
+          </div>
+          <div>
+            <label for="weight-to">To unit</label>
+            <select id="weight-to">
+              <option value="lb">Pounds (lb)</option>
+              <option value="g">Grams (g)</option>
+              <option value="kg">Kilograms (kg)</option>
+              <option value="oz">Ounces (oz)</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button onclick="convertWeight()">Convert</button>
+          <button class="secondary" onclick="clearFields(['weight-value']); document.getElementById('weight-from').value='g'; document.getElementById('weight-to').value='lb'; setText('weight-result','—'); setText('weight-detail','Enter a value and choose units to convert.');">Reset</button>
+        </div>
+      </div>
+      <div class="result-box">
+        <div class="result-label">Converted result</div>
+        <div id="weight-result" class="result-value">—</div>
+        <div id="weight-detail" class="small-note">Enter a value and choose units to convert.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2>How weight conversion works</h2>
+        <p>Weight conversion works by changing a value from one unit scale into another. A common way to do that is to convert everything into a base unit first, then convert from that base unit into the target unit.</p>
+        <p>This converter uses grams as the base reference, then calculates the matching value in kilograms, ounces, or pounds.</p>
+      </div>
+    </section>
+
+    <section class="section grid">
+      <div class="card">
+        <h2>Example</h2>
+        <p>If you want to convert <strong>5 kilograms</strong> to pounds:</p>
+        <p><strong>5 kg = 5,000 g = 11.02 lb</strong></p>
+        <p>So 5 kilograms is about 11.02 pounds.</p>
+      </div>
+      <div class="card">
+        <h2>Common uses</h2>
+        <ul class="checklist">
+          <li>Converting recipe ingredients</li>
+          <li>Checking shipping package weights</li>
+          <li>Tracking body weight or gym equipment</li>
+          <li>Comparing product sizes while shopping</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2>Frequently asked questions</h2>
+        <div class="table-like">
+          <div class="table-row"><strong>How many grams are in a kilogram?</strong><br />There are 1,000 grams in 1 kilogram.</div>
+          <div class="table-row"><strong>How many ounces are in a pound?</strong><br />There are 16 ounces in 1 pound.</div>
+          <div class="table-row"><strong>Can I use this for kitchen and shipping conversions?</strong><br />Yes. It works well for cooking, mailing packages, shopping, and general measurement needs.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div>© Unit Conversion Toolkit</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function convertWeight() {
+  const value = toNumber(document.getElementById('weight-value').value);
+  const from = document.getElementById('weight-from').value;
+  const to = document.getElementById('weight-to').value;
+
+  if (!Number.isFinite(value)) {
+    setText('weight-result', '—');
+    setText('weight-detail', 'Please enter a valid weight value.');
+    return;
+  }
+
+  const toGrams = {
+    g: 1,
+    kg: 1000,
+    oz: 28.349523125,
+    lb: 453.59237
+  };
+
+  const unitLabels = {
+    g: 'g',
+    kg: 'kg',
+    oz: 'oz',
+    lb: 'lb'
+  };
+
+  const grams = value * toGrams[from];
+  const result = grams / toGrams[to];
+
+  setText('weight-result', `${formatNumber(result)} ${unitLabels[to]}`);
+  setText('weight-detail', `${formatNumber(value)} ${unitLabels[from]} = ${formatNumber(result)} ${unitLabels[to]}`);
+}
+</script>
+</body>
+</html>

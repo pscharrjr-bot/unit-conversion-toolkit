@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Temperature Converter | Unit Conversion Toolkit</title>
+  <meta name="description" content="Use Unit Conversion Toolkit's free temperature converter to switch between Fahrenheit and Celsius." />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="scripts.js" defer></script>
+  <style>
+    select {
+      width: 100%;
+      padding: 0.85rem 0.9rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 1rem;
+      background: white;
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="topbar">
+      <a class="brand" href="index.html">Unit Conversion Toolkit</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="distance.html">Distance</a>
+        <a href="temperature.html">Temperature</a>
+        <a href="weight.html">Weight</a>
+        <a href="volume.html">Volume</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+    <div class="hero">
+      <h1>Temperature Converter</h1>
+      <p>Convert temperatures between Fahrenheit and Celsius in seconds. This free converter is useful for cooking, weather, travel, schoolwork, and any everyday temperature comparison.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <section class="section calculator-layout">
+      <div class="card">
+        <h2>Convert temperature</h2>
+        <div class="input-grid">
+          <div>
+            <label for="temperature-value">Temperature value</label>
+            <input id="temperature-value" type="number" placeholder="72" />
+          </div>
+          <div>
+            <label for="temperature-from">From unit</label>
+            <select id="temperature-from">
+              <option value="F">Fahrenheit (°F)</option>
+              <option value="C">Celsius (°C)</option>
+            </select>
+          </div>
+          <div>
+            <label for="temperature-to">To unit</label>
+            <select id="temperature-to">
+              <option value="C">Celsius (°C)</option>
+              <option value="F">Fahrenheit (°F)</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button onclick="convertTemperature()">Convert</button>
+          <button class="secondary" onclick="clearFields(['temperature-value']); document.getElementById('temperature-from').value='F'; document.getElementById('temperature-to').value='C'; setText('temperature-result','—'); setText('temperature-detail','Enter a value and choose units to convert.');">Reset</button>
+        </div>
+      </div>
+      <div class="result-box">
+        <div class="result-label">Converted result</div>
+        <div id="temperature-result" class="result-value">—</div>
+        <div id="temperature-detail" class="small-note">Enter a value and choose units to convert.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2>How temperature conversion works</h2>
+        <p>Temperature scales measure the same heat level using different starting points. Fahrenheit is commonly used in the United States, while Celsius is standard in much of the rest of the world.</p>
+        <p>To convert Fahrenheit to Celsius, subtract 32 and multiply by 5/9. To convert Celsius to Fahrenheit, multiply by 9/5 and add 32.</p>
+      </div>
+    </section>
+
+    <section class="section grid">
+      <div class="card">
+        <h2>Example</h2>
+        <p>If the weather forecast says <strong>72°F</strong> and you want it in Celsius:</p>
+        <p><strong>(72 - 32) × 5 ÷ 9 = 22.22°C</strong></p>
+        <p>So 72°F is about 22.22°C.</p>
+      </div>
+      <div class="card">
+        <h2>Common uses</h2>
+        <ul class="checklist">
+          <li>Checking weather while traveling</li>
+          <li>Reading recipes from another country</li>
+          <li>Comparing room, pool, or outdoor temperatures</li>
+          <li>Solving school science and math problems</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2>Frequently asked questions</h2>
+        <div class="table-like">
+          <div class="table-row"><strong>What is the formula for Fahrenheit to Celsius?</strong><br />Subtract 32 from the Fahrenheit value, then multiply by 5/9.</div>
+          <div class="table-row"><strong>What is the formula for Celsius to Fahrenheit?</strong><br />Multiply the Celsius value by 9/5, then add 32.</div>
+          <div class="table-row"><strong>Can this converter handle negative temperatures?</strong><br />Yes. You can enter negative Fahrenheit or Celsius values and convert them the same way.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div>© Unit Conversion Toolkit</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function convertTemperature() {
+  const value = toNumber(document.getElementById('temperature-value').value);
+  const from = document.getElementById('temperature-from').value;
+  const to = document.getElementById('temperature-to').value;
+
+  if (!Number.isFinite(value)) {
+    setText('temperature-result', '—');
+    setText('temperature-detail', 'Please enter a valid temperature value.');
+    return;
+  }
+
+  let result = value;
+  if (from !== to) {
+    if (from === 'F' && to === 'C') {
+      result = (value - 32) * 5 / 9;
+    } else if (from === 'C' && to === 'F') {
+      result = (value * 9 / 5) + 32;
+    }
+  }
+
+  const fromUnit = from === 'F' ? '°F' : '°C';
+  const toUnit = to === 'F' ? '°F' : '°C';
+  setText('temperature-result', `${formatNumber(result)} ${toUnit}`);
+  setText('temperature-detail', `${formatNumber(value)} ${fromUnit} = ${formatNumber(result)} ${toUnit}`);
+}
+</script>
+</body>
+</html>

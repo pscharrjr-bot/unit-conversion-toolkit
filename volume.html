@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volume Converter | Unit Conversion Toolkit</title>
+  <meta name="description" content="Use Unit Conversion Toolkit's free volume converter to switch between milliliters, liters, fluid ounces, cups, pints, quarts, gallons, teaspoons, and tablespoons." />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="scripts.js" defer></script>
+  <style>
+    select {
+      width: 100%;
+      padding: 0.85rem 0.9rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 1rem;
+      background: white;
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="topbar">
+      <a class="brand" href="index.html">Unit Conversion Toolkit</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="distance.html">Distance</a>
+        <a href="temperature.html">Temperature</a>
+        <a href="weight.html">Weight</a>
+        <a href="volume.html">Volume</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+    <div class="hero">
+      <h1>Volume Converter</h1>
+      <p>Convert common kitchen, beverage, and household volume measurements in seconds. Enter one value, choose the starting unit, choose the target unit, and see the converted result instantly.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <section class="section calculator-layout">
+      <div class="card">
+        <h2>Convert volume units</h2>
+        <div class="input-grid">
+          <div>
+            <label for="volume-value">Value</label>
+            <input id="volume-value" type="number" placeholder="2.5" />
+          </div>
+          <div>
+            <label for="from-unit">From unit</label>
+            <select id="from-unit">
+              <option value="mL">Milliliters (mL)</option>
+              <option value="L">Liters (L)</option>
+              <option value="fl-oz">Fluid ounces (fl oz)</option>
+              <option value="cups">Cups</option>
+              <option value="pints">Pints</option>
+              <option value="quarts">Quarts</option>
+              <option value="gallons">Gallons</option>
+              <option value="teaspoons">Teaspoons</option>
+              <option value="tablespoons">Tablespoons</option>
+            </select>
+          </div>
+          <div>
+            <label for="to-unit">To unit</label>
+            <select id="to-unit">
+              <option value="mL">Milliliters (mL)</option>
+              <option value="L">Liters (L)</option>
+              <option value="fl-oz" selected>Fluid ounces (fl oz)</option>
+              <option value="cups">Cups</option>
+              <option value="pints">Pints</option>
+              <option value="quarts">Quarts</option>
+              <option value="gallons">Gallons</option>
+              <option value="teaspoons">Teaspoons</option>
+              <option value="tablespoons">Tablespoons</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button onclick="convertVolume()">Convert</button>
+          <button class="secondary" onclick="clearFields(['volume-value']); document.getElementById('from-unit').value='mL'; document.getElementById('to-unit').value='fl-oz'; setText('volume-result','—'); setText('volume-detail','Enter a value and choose units to convert.');">Reset</button>
+        </div>
+      </div>
+      <div class="result-box">
+        <div class="result-label">Converted result</div>
+        <div id="volume-result" class="result-value">—</div>
+        <div id="volume-detail" class="small-note">Enter a value and choose units to convert.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2>How this volume converter works</h2>
+        <p>This tool converts the amount you enter into a shared milliliter base, then converts that value into the target unit you select. That makes it useful for quick kitchen math, drink measurements, recipe scaling, and everyday liquid conversions.</p>
+        <p>Supported units: <strong>mL, L, fl oz, cups, pints, quarts, gallons, teaspoons, and tablespoons.</strong></p>
+      </div>
+    </section>
+
+    <section class="section grid">
+      <div class="card">
+        <h2>Example</h2>
+        <p>If you want to convert <strong>2 liters</strong> to <strong>fluid ounces</strong>, the result is about <strong>67.63 fl oz</strong>.</p>
+        <p>That is helpful when you are comparing bottle sizes, converting recipe quantities, or checking serving amounts in different measurement systems.</p>
+      </div>
+      <div class="card">
+        <h2>Common uses</h2>
+        <ul class="checklist">
+          <li>Converting recipe ingredients between teaspoons, tablespoons, cups, and liters</li>
+          <li>Checking beverage sizes in milliliters, ounces, or gallons</li>
+          <li>Scaling soups, sauces, and baking mixes up or down</li>
+          <li>Comparing product packaging across metric and US customary units</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2>Frequently asked questions</h2>
+        <div class="table-like">
+          <div class="table-row"><strong>How many milliliters are in 1 liter?</strong><br />1 liter equals 1,000 milliliters.</div>
+          <div class="table-row"><strong>How many tablespoons are in a cup?</strong><br />There are 16 tablespoons in 1 US cup.</div>
+          <div class="table-row"><strong>Can I use this for cooking and baking?</strong><br />Yes. It is handy for recipes, drinks, meal prep, and general kitchen conversions.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div>© Unit Conversion Toolkit</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const volumeUnits = {
+  'mL': { label: 'mL', inMilliliters: 1 },
+  'L': { label: 'L', inMilliliters: 1000 },
+  'fl-oz': { label: 'fl oz', inMilliliters: 29.5735 },
+  'cups': { label: 'cups', inMilliliters: 236.588 },
+  'pints': { label: 'pints', inMilliliters: 473.176 },
+  'quarts': { label: 'quarts', inMilliliters: 946.353 },
+  'gallons': { label: 'gallons', inMilliliters: 3785.41 },
+  'teaspoons': { label: 'teaspoons', inMilliliters: 4.92892 },
+  'tablespoons': { label: 'tablespoons', inMilliliters: 14.7868 }
+};
+
+function convertVolume() {
+  const value = toNumber(document.getElementById('volume-value').value);
+  const fromUnit = document.getElementById('from-unit').value;
+  const toUnit = document.getElementById('to-unit').value;
+
+  if (!Number.isFinite(value)) {
+    setText('volume-result', '—');
+    setText('volume-detail', 'Please enter a valid number.');
+    return;
+  }
+
+  const fromFactor = volumeUnits[fromUnit]?.inMilliliters;
+  const toFactor = volumeUnits[toUnit]?.inMilliliters;
+
+  if (!fromFactor || !toFactor) {
+    setText('volume-result', '—');
+    setText('volume-detail', 'Please select valid units.');
+    return;
+  }
+
+  const milliliters = value * fromFactor;
+  const converted = milliliters / toFactor;
+  const fromLabel = volumeUnits[fromUnit].label;
+  const toLabel = volumeUnits[toUnit].label;
+
+  setText('volume-result', `${formatNumber(converted)} ${toLabel}`);
+  setText('volume-detail', `${formatNumber(value)} ${fromLabel} = ${formatNumber(converted)} ${toLabel}`);
+}
+</script>
+</body>
+</html>
