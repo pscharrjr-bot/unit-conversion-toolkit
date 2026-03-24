@@ -52,8 +52,8 @@
             <input id="volume-value" type="number" placeholder="2.5" />
           </div>
           <div>
-            <label for="from-unit">From unit</label>
-            <select id="from-unit">
+            <label for="volume-from">From unit</label>
+            <select id="volume-from">
               <option value="mL">Milliliters (mL)</option>
               <option value="L">Liters (L)</option>
               <option value="fl-oz">Fluid ounces (fl oz)</option>
@@ -66,8 +66,8 @@
             </select>
           </div>
           <div>
-            <label for="to-unit">To unit</label>
-            <select id="to-unit">
+            <label for="volume-to">To unit</label>
+            <select id="volume-to">
               <option value="mL">Milliliters (mL)</option>
               <option value="L">Liters (L)</option>
               <option value="fl-oz" selected>Fluid ounces (fl oz)</option>
@@ -82,7 +82,7 @@
         </div>
         <div class="actions">
           <button onclick="convertVolume()">Convert</button>
-          <button class="secondary" onclick="clearFields(['volume-value']); document.getElementById('from-unit').value='mL'; document.getElementById('to-unit').value='fl-oz'; setText('volume-result','—'); setText('volume-detail','Enter a value and choose units to convert.');">Reset</button>
+          <button class="secondary" onclick="clearFields(['volume-value']); document.getElementById('volume-from').value='mL'; document.getElementById('volume-to').value='fl-oz'; setText('volume-result','—'); setText('volume-detail','Enter a value and choose units to convert.');">Reset</button>
         </div>
       </div>
       <div class="result-box">
@@ -157,8 +157,8 @@ const volumeUnits = {
 
 function convertVolume() {
   const value = toNumber(document.getElementById('volume-value').value);
-  const fromUnit = document.getElementById('from-unit').value;
-  const toUnit = document.getElementById('to-unit').value;
+  const fromUnit = document.getElementById('volume-from').value;
+  const toUnit = document.getElementById('volume-to').value;
 
   if (!Number.isFinite(value)) {
     setText('volume-result', '—');

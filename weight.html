@@ -71,8 +71,8 @@
           </div>
         </div>
         <div class="actions">
-          <button onclick="convertWeight()">Convert</button>
-          <button class="secondary" onclick="clearFields(['weight-value']); document.getElementById('weight-from').value='g'; document.getElementById('weight-to').value='lb'; setText('weight-result','—'); setText('weight-detail','Enter a value and choose units to convert.');">Reset</button>
+          <button type="button" onclick="convertWeight()">Convert</button>
+          <button type="button" class="secondary" onclick="resetWeightConverter()">Reset</button>
         </div>
       </div>
       <div class="result-box">
@@ -134,14 +134,23 @@
 </footer>
 
 <script>
+function updateWeightResult(resultText, detailText) {
+  document.getElementById('weight-result').textContent = resultText;
+  document.getElementById('weight-detail').textContent = detailText;
+}
+
+function formatWeightNumber(value) {
+  if (!Number.isFinite(value)) return '—';
+  return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(value);
+}
+
 function convertWeight() {
-  const value = toNumber(document.getElementById('weight-value').value);
+  const value = Number.parseFloat(document.getElementById('weight-value').value);
   const from = document.getElementById('weight-from').value;
   const to = document.getElementById('weight-to').value;
 
   if (!Number.isFinite(value)) {
-    setText('weight-result', '—');
-    setText('weight-detail', 'Please enter a valid weight value.');
+    updateWeightResult('—', 'Please enter a valid weight value.');
     return;
   }
 
@@ -162,8 +171,17 @@ function convertWeight() {
   const grams = value * toGrams[from];
   const result = grams / toGrams[to];
 
-  setText('weight-result', `${formatNumber(result)} ${unitLabels[to]}`);
-  setText('weight-detail', `${formatNumber(value)} ${unitLabels[from]} = ${formatNumber(result)} ${unitLabels[to]}`);
+  updateWeightResult(
+    `${formatWeightNumber(result)} ${unitLabels[to]}`,
+    `${formatWeightNumber(value)} ${unitLabels[from]} = ${formatWeightNumber(result)} ${unitLabels[to]}`
+  );
+}
+
+function resetWeightConverter() {
+  document.getElementById('weight-value').value = '';
+  document.getElementById('weight-from').value = 'g';
+  document.getElementById('weight-to').value = 'lb';
+  updateWeightResult('—', 'Enter a value and choose units to convert.');
 }
 </script>
 </body>

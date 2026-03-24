@@ -41,8 +41,8 @@
             <input id="distance-value" type="number" placeholder="5" />
           </div>
           <div>
-            <label for="from-unit">From unit</label>
-            <select id="from-unit">
+            <label for="distance-from">From unit</label>
+            <select id="distance-from">
               <option value="cm">Centimeters (cm)</option>
               <option value="m">Meters (m)</option>
               <option value="km">Kilometers (km)</option>
@@ -53,8 +53,8 @@
             </select>
           </div>
           <div>
-            <label for="to-unit">To unit</label>
-            <select id="to-unit">
+            <label for="distance-to">To unit</label>
+            <select id="distance-to">
               <option value="m">Meters (m)</option>
               <option value="cm">Centimeters (cm)</option>
               <option value="km">Kilometers (km)</option>
@@ -150,8 +150,8 @@ const distanceLabels = {
 
 function convertDistance() {
   const value = toNumber(document.getElementById('distance-value').value);
-  const fromUnit = document.getElementById('from-unit').value;
-  const toUnit = document.getElementById('to-unit').value;
+  const fromUnit = document.getElementById('distance-from').value;
+  const toUnit = document.getElementById('distance-to').value;
 
   if (!Number.isFinite(value)) {
     setText('distance-result', '—');
@@ -159,8 +159,17 @@ function convertDistance() {
     return;
   }
 
-  const meters = value * distanceToMeters[fromUnit];
-  const result = meters / distanceToMeters[toUnit];
+  const fromFactor = distanceToMeters[fromUnit];
+  const toFactor = distanceToMeters[toUnit];
+
+  if (!fromFactor || !toFactor) {
+    setText('distance-result', '—');
+    setText('distance-detail', 'Please select valid units.');
+    return;
+  }
+
+  const meters = value * fromFactor;
+  const result = meters / toFactor;
 
   setText('distance-result', `${formatNumber(result)} ${toUnit}`);
   setText(
@@ -171,8 +180,8 @@ function convertDistance() {
 
 function resetDistanceConverter() {
   clearFields(['distance-value']);
-  document.getElementById('from-unit').value = 'cm';
-  document.getElementById('to-unit').value = 'm';
+  document.getElementById('distance-from').value = 'cm';
+  document.getElementById('distance-to').value = 'm';
   setText('distance-result', '—');
   setText('distance-detail', 'Enter a value and select units to convert.');
 }

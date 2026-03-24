@@ -67,8 +67,8 @@
           </div>
         </div>
         <div class="actions">
-          <button onclick="convertTemperature()">Convert</button>
-          <button class="secondary" onclick="clearFields(['temperature-value']); document.getElementById('temperature-from').value='F'; document.getElementById('temperature-to').value='C'; setText('temperature-result','—'); setText('temperature-detail','Enter a value and choose units to convert.');">Reset</button>
+          <button type="button" onclick="convertTemperature()">Convert</button>
+          <button type="button" class="secondary" onclick="resetTemperatureConverter()">Reset</button>
         </div>
       </div>
       <div class="result-box">
@@ -130,14 +130,23 @@
 </footer>
 
 <script>
+function updateTemperatureResult(resultText, detailText) {
+  document.getElementById('temperature-result').textContent = resultText;
+  document.getElementById('temperature-detail').textContent = detailText;
+}
+
+function formatTemperatureNumber(value) {
+  if (!Number.isFinite(value)) return '—';
+  return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(value);
+}
+
 function convertTemperature() {
-  const value = toNumber(document.getElementById('temperature-value').value);
+  const value = Number.parseFloat(document.getElementById('temperature-value').value);
   const from = document.getElementById('temperature-from').value;
   const to = document.getElementById('temperature-to').value;
 
   if (!Number.isFinite(value)) {
-    setText('temperature-result', '—');
-    setText('temperature-detail', 'Please enter a valid temperature value.');
+    updateTemperatureResult('—', 'Please enter a valid temperature value.');
     return;
   }
 
@@ -152,8 +161,17 @@ function convertTemperature() {
 
   const fromUnit = from === 'F' ? '°F' : '°C';
   const toUnit = to === 'F' ? '°F' : '°C';
-  setText('temperature-result', `${formatNumber(result)} ${toUnit}`);
-  setText('temperature-detail', `${formatNumber(value)} ${fromUnit} = ${formatNumber(result)} ${toUnit}`);
+  updateTemperatureResult(
+    `${formatTemperatureNumber(result)} ${toUnit}`,
+    `${formatTemperatureNumber(value)} ${fromUnit} = ${formatTemperatureNumber(result)} ${toUnit}`
+  );
+}
+
+function resetTemperatureConverter() {
+  document.getElementById('temperature-value').value = '';
+  document.getElementById('temperature-from').value = 'F';
+  document.getElementById('temperature-to').value = 'C';
+  updateTemperatureResult('—', 'Enter a value and choose units to convert.');
 }
 </script>
 </body>
